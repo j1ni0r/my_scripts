@@ -1,0 +1,27 @@
+#!/bin/bash
+for server in $(cat $1); do
+echo "Servidor: $server"
+senha=1;
+sshpass -p $senha ssh -o "StrictHostKeyChecking no" root@$server "exit";
+if [[ $? = 0 ]]; then
+sshpass -p $senha ssh -o "StrictHostKeyChecking no" root@$server "update-pdv.sh ";
+        echo "Versão atualizada";
+        else
+		echo "Algo deu erro, possivel erro de chave. Tentando apagar chave...";
+		sleep 2;
+		ssh-keygen -f "/home/$USER/.ssh/known_hosts" -R $server;
+		sleep 2;
+#senha=$( dialog --stdout --title 'Senha' --inputbox 'Digite a senha do pdv:' 0 0 )
+senha=1;
+sshpass -p $senha ssh -o "StrictHostKeyChecking no" root@$server "exit" ;
+sshpass -p $senha ssh -o "StrictHostKeyChecking no" root@$server "update-pdv.sh ";
+			if [[ $? = 0 ]]; then
+				echo "Versão atualizada";
+sleep 2;
+	        	else
+	       			echo "Algo deu erro. Possivel IP errado ou Sem Rota";
+				echo "Deu erro no pdv $server" >> /bin/logerros;
+			fi
+	fi
+
+done
