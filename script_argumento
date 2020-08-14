@@ -1,10 +1,12 @@
 #!/bin/bash
 # Author: Wilson Júnior
+# Laço de repetição
 for server in $(cat $1); do
-echo "Servidor: $server"
+echo "Servidor: $server" 
 senha=1;
-sshpass -p $senha ssh -o "StrictHostKeyChecking no" root@$server "exit";
-if [[ $? = 0 ]]; then
+sshpass -p $senha ssh -o "StrictHostKeyChecking no" root@$server "exit"; # Acessar o host por ssh enviando a senha guardada e 
+# irá pular a verificação de chave para não precisar digitar yes quando o prompt aparecer
+if [[ $? = 0 ]]; then # Verificar se comando anterior deu certo
 sshpass -p $senha ssh -o "StrictHostKeyChecking no" root@$server "update-pdv.sh ";
         echo "Versão atualizada";
         else
